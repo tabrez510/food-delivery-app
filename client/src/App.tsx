@@ -1,11 +1,11 @@
 import Login from "./auth/Login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./auth/Signup";
 import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import VerifyEmail from "./auth/VerifyEmail";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import HereSection from "./components/HereSection";
-// import MainLayout from "./layout/MainLayout";
+import MainLayout from "./layout/MainLayout";
 // import Profile from "./components/Profile";
 // import SearchPage from "./components/SearchPage";
 // import RestaurantDetail from "./components/RestaurantDetail";
@@ -54,12 +54,12 @@ import VerifyEmail from "./auth/VerifyEmail";
 
 const appRouter = createBrowserRouter([
   {
-    // path: "/",
-    // element: (
+    path: "/",
+    element: (
     //   <ProtectedRoutes>
-    //     <MainLayout />
+        <MainLayout />
     //   </ProtectedRoutes>
-    // ),
+    ),
     // children: [
     //   {
     //     path: "/",
