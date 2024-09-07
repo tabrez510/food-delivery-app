@@ -2,12 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SignupInputState, userSignupSchema } from "@/schema/userSchema";
-// import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { Loader2, LockKeyhole, Mail, PhoneOutgoing, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// typescript me type define krne ka 2 trika hota hai
 
 const Signup = () => {
   const [input, setInput] = useState<SignupInputState>({
@@ -17,9 +16,9 @@ const Signup = () => {
     contact: "",
   });
   const [errors, setErrors] = useState<Partial<SignupInputState>>({});
-  // const { signup, loading } = useUserStore();
+  const { signup, loading } = useUserStore();
   const loading = false;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
@@ -34,12 +33,12 @@ const Signup = () => {
       return;
     }
     // login api implementation start here
-    // try {
-    //   await signup(input);
-    //   navigate("/verify-email");
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await signup(input);
+      navigate("/verify-email");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
