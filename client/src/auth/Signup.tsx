@@ -7,6 +7,7 @@ import { Loader2, LockKeyhole, Mail, PhoneOutgoing, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+// typescript me type define krne ka 2 trika hota hai
 
 const Signup = () => {
   const [input, setInput] = useState<SignupInputState>({
@@ -17,7 +18,6 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState<Partial<SignupInputState>>({});
   const { signup, loading } = useUserStore();
-  const loading = false;
   const navigate = useNavigate();
   const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,7 +48,7 @@ const Signup = () => {
         className="md:p-8 w-full max-w-md rounded-lg md:border border-gray-200 mx-4"
       >
         <div className="mb-4">
-          <h1 className="font-bold text-center text-2xl">Sign Up</h1>
+          <h1 className="font-bold text-2xl">FoodHub</h1>
         </div>
         <div className="mb-4">
           <div className="relative">
