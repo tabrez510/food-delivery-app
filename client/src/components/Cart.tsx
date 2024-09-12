@@ -20,9 +20,9 @@ const Cart = () => {
   const { cart, decrementQuantity, incrementQuantity, getCart, removeFromTheCart, clearCart } = useCartStore();
   useEffect(() => {
     getCart()
-  }, []);
+  }, [getCart]);
 
-  let totalAmount = cart.reduce((acc, ele) => {
+  const totalAmount = cart.reduce((acc, ele) => {
     return acc + ele.price * ele.quantity;
   }, 0);
   return (

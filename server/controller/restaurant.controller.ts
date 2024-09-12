@@ -140,7 +140,6 @@ export const searchRestaurant = async (req: Request, res: Response) => {
         const selectedCuisines = (req.query.selectedCuisines as string || "").split(",").filter(cuisine => cuisine);
         const query: any = {};
         // basic search based on searchText (name ,city, country)
-        console.log(selectedCuisines);
         
         if (searchText) {
             query.$or = [

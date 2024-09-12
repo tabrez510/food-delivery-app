@@ -49,7 +49,7 @@ const RestaurantDetail = () => {
           </div>
         </div>
         {singleRestaurant?.menus && (
-          <AvailableMenu menus={singleRestaurant?.menus!} />
+          <AvailableMenu menus={singleRestaurant?.menus} />
         )}
       </div>
     </div>

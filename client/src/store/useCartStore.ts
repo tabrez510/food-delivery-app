@@ -22,12 +22,12 @@ export const useCartStore = create<CartState>()(
           });
           set((state) => {
             const exisitingItem = state.cart.find(
-              (cartItem) => cartItem._id === item._id
+              (cartItem) => cartItem.menuId === item._id
             );
             if (exisitingItem) {
               return {
                 cart: state?.cart.map((cartItem) =>
-                  cartItem._id === item._id
+                  cartItem.menuId === item._id
                     ? { ...cartItem, quantity: cartItem.quantity + 1 }
                     : cartItem
                 ),
