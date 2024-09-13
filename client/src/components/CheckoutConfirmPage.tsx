@@ -34,14 +34,15 @@ const CheckoutConfirmPage = ({
   });
   const { cart } = useCartStore();
   const { restaurant } = useRestaurantStore();
-  const { createCheckoutSession, loading } = useOrderStore();
+  const { createOrder, loading } = useOrderStore();
+  const {clearCart} = useCartStore();
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
+
   const checkoutHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // api implementation start from here
     try {
       const checkoutData: CheckoutSessionRequest = {
         cartItems: cart.map((cartItem) => ({
@@ -54,7 +55,9 @@ const CheckoutConfirmPage = ({
         deliveryDetails: input,
         restaurantId: restaurant?._id as string,
       };
-      await createCheckoutSession(checkoutData);
+      await createOrder(checkoutData);
+      clearCart();
+      setOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -134,8 +137,8 @@ const CheckoutConfirmPage = ({
                 Please wait
               </Button>
             ) : (
-              <Button className="bg-orange hover:bg-hoverOrange">
-                Continue To Payment
+              <Button type="submit" className="bg-orange hover:bg-hoverOrange">
+                Confirm Order
               </Button>
             )}
           </DialogFooter>

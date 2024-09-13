@@ -18,9 +18,8 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
                 message: "User not authenticated"
             });
         }
-        // verify the toekn
+
         const decode = jwt.verify(token, process.env.SECRET_KEY!) as jwt.JwtPayload;
-        // check is decoding was successfull
         if (!decode) {
             return res.status(401).json({
                 success: false,

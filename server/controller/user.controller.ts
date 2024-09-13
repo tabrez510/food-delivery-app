@@ -5,7 +5,7 @@ import crypto from "crypto";
 import cloudinary from "../utils/cloudinary";
 import { generateVerificationCode } from "../utils/generateVerificationCode";
 import { generateToken } from "../utils/generateToken";
-import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/email";
+import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../utils/brevo-mail/email";
 
 export const signup = async (req: Request, res: Response) => {
     try {
@@ -94,7 +94,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
         user.verificationTokenExpiresAt = undefined
         await user.save();
 
-        // send welcome email
         await sendWelcomeEmail(user.email, user.fullname);
 
         return res.status(200).json({
@@ -137,8 +136,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         user.resetPasswordTokenExpiresAt = resetTokenExpiresAt;
         await user.save();
 
-        // send email
-        await sendPasswordResetEmail(user.email, `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`);
+        await sendPasswordResetEmail(user.email, `${process.env.FRONTEND_URL}/reset-password/${resetToken}`);
 
         return res.status(200).json({
             success: true,
@@ -160,14 +158,12 @@ export const resetPassword = async (req: Request, res: Response) => {
                 message: "Invalid or expired reset token"
             });
         }
-        //update password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         user.resetPasswordToken = undefined;
         user.resetPasswordTokenExpiresAt = undefined;
         await user.save();
 
-        // send success reset email
         await sendResetSuccessEmail(user.email);
 
         return res.status(200).json({
@@ -202,20 +198,27 @@ export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.id;
         const { fullname, email, address, city, country, profilePicture } = req.body;
-        // upload image on cloudinary
-        let cloudResponse: any;
-        cloudResponse = await cloudinary.uploader.upload(profilePicture);
-        const updatedData = {fullname, email, address, city, country, profilePicture};
 
-        const user = await User.findByIdAndUpdate(userId, updatedData,{new:true}).select("-password");
+        let cloudResponse: any;
+        let profilePictureUrl: string | undefined = undefined;
+
+        // Only upload image if profilePicture is provided
+        if (profilePicture) {
+            cloudResponse = await cloudinary.uploader.upload(profilePicture);
+            profilePictureUrl = cloudResponse.secure_url;
+        }
+
+        const updatedData = { fullname, email, address, city, country, profilePicture: profilePictureUrl };
+
+        const user = await User.findByIdAndUpdate(userId, updatedData, { new: true }).select("-password");
 
         return res.status(200).json({
-            success:true,
+            success: true,
             user,
-            message:"Profile updated successfully"
+            message: "Profile updated successfully"
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
+};

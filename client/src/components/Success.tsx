@@ -1,14 +1,14 @@
- 
 import { IndianRupee } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useOrderStore } from "@/store/useOrderStore";
-import { useEffect } from "react"; 
+import { useEffect } from "react";
 import { CartItem } from "@/types/cartType";
 
 const Success = () => {
   const { orders, getOrderDetails } = useOrderStore();
+  console.log(orders);
 
   useEffect(() => {
     getOrderDetails();
@@ -26,21 +26,19 @@ const Success = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4">
       <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 max-w-lg w-full">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-            Order Status:{" "}
-            <span className="text-[#FF5A5A]">{"confirm".toUpperCase()}</span>
-          </h1>
-        </div>
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
-            Order Summary
-          </h2>
-          {/* Your Ordered Item Display here  */}
-          {orders.map((order:any, index:number) => (
-            <div key={index}>
-              {order.cartItems.map((item:CartItem) => (
-                <div className="mb-4">
+          {orders.map((order: any) => (
+            <div key={order._id}>
+              <div className="text-center mb-6">
+                <h1 className="font-bold text-gray-800 dark:text-gray-200">
+                  Order Status:{" "}
+                  <span className="text-[#FF5A5A]">
+                    {order.status.toUpperCase()}
+                  </span>
+                </h1>
+              </div>
+              {order.cartItems.map((item: CartItem) => (
+                <div key={item._id} className="mb-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center">
                       <img
@@ -55,7 +53,9 @@ const Success = () => {
                     <div className="text-right">
                       <div className="text-gray-800 dark:text-gray-200 flex items-center">
                         <IndianRupee />
-                        <span className="text-lg font-medium">{item.price}</span>
+                        <span className="text-lg font-medium">
+                          {item.price}
+                        </span>
                       </div>
                     </div>
                   </div>
