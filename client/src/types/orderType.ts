@@ -18,7 +18,7 @@ export type CheckoutSessionRequest = {
 };
 
 // Represents an order with additional fields
-export interface Order extends CheckoutSessionRequest {
+export interface Orders extends CheckoutSessionRequest {
   _id: string;
   status: string;
   totalAmount: number;
@@ -27,7 +27,7 @@ export interface Order extends CheckoutSessionRequest {
 // State type for managing orders
 export type OrderState = {
   loading: boolean;
-  orders: Order[];
+  orders: Orders[];
   createOrder: (orderRequest: CheckoutSessionRequest) => Promise<void>; // Renamed to createOrder
   getOrderDetails: () => Promise<void>;
 };
