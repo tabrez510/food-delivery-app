@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { SignupInputState, userSignupSchema } from "@/schema/userSchema";
 import { useUserStore } from "@/store/useUserStore";
@@ -7,7 +9,6 @@ import { Loader2, LockKeyhole, Mail, PhoneOutgoing, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// typescript me type define krne ka 2 trika hota hai
 
 const Signup = () => {
   const [input, setInput] = useState<SignupInputState>({
@@ -15,6 +16,7 @@ const Signup = () => {
     email: "",
     password: "",
     contact: "",
+    admin: false,
   });
   const [errors, setErrors] = useState<Partial<SignupInputState>>({});
   const { signup, loading } = useUserStore();
@@ -23,16 +25,19 @@ const Signup = () => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
+  const roleChangeEventHandler = (value: string) => {
+    const name = "admin";
+    const admin = value === "restaurant owner" ? true : false;
+    setInput({ ...input, [name]: admin });
+  };
   const loginSubmitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    // form validation check start
     const result = userSignupSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
       setErrors(fieldErrors as Partial<SignupInputState>);
       return;
     }
-    // login api implementation start here
     try {
       await signup(input);
       navigate("/verify-email");
@@ -113,6 +118,21 @@ const Signup = () => {
               <span className="text-xs text-red-500">{errors.contact}</span>
             )}
           </div>
+        </div>
+        <div className="mb-4 flex items-center content-between">
+          <div className="me-4">
+            <Label>Role : </Label>
+          </div>
+          <RadioGroup onValueChange={roleChangeEventHandler} defaultValue="user" className="flex items-center content-between">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="user" id="user" />
+              <Label htmlFor="user">User</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="restaurant owner" id="restaurant owner" />
+              <Label htmlFor="restaurant owner">Restaurant owner</Label>
+            </div>
+          </RadioGroup>
         </div>
         <div className="mb-10">
           {loading ? (

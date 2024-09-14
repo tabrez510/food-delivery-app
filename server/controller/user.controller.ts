@@ -9,7 +9,7 @@ import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, s
 
 export const signup = async (req: Request, res: Response) => {
     try {
-        const { fullname, email, password, contact } = req.body;
+        const { fullname, email, password, contact, admin } = req.body;
 
         let user = await User.findOne({ email });
         if (user) {
@@ -26,6 +26,7 @@ export const signup = async (req: Request, res: Response) => {
             email,
             password: hashedPassword,
             contact: Number(contact),
+            admin,
             verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
         })
